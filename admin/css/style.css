@@ -1,0 +1,7 @@
+body{
+    direction: rtl;
+}
+.my-style-custome{
+    position: absolute;
+    margin-right: 10%;
+}

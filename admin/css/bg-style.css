@@ -1,0 +1,76 @@
+body{
+    direction: rtl;
+    background-repeat: no-repeat;
+    min-height: 600px;
+    background-color: teal; /* For browsers that do not support gradients */
+    background-image: radial-gradient(red, rgb(0, 128, 255), green); /* Standard syntax (must be last) */
+    background-size: contain;
+}
+#body{
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    min-height: 400px;
+    background-color: #00ff40;
+    /*Forbrowsersthatdonotsupportgradients*/background-image: radial-gradient(rgb(53, 184, 123),rgb(81, 160, 81));
+    /*Standardsyntax(mustbelast)*/background-image: url('./../img/photo_2017-04-04_20-35-34.jpg');
+    border-radius: 13px;
+    -webkit-border-radius: 13px;
+    -moz-border-radius: 13px;
+    -ms-border-radius: 13px;
+    -o-border-radius: 13px;
+    border-image-repeat: none;
+    mask-border-repeat: none;
+    background-position-y: center;
+}
+#SlateBlue{
+
+    background-color: red; /* For browsers that do not support gradients */
+    background-image: radial-gradient(red, rgb(0, 128, 255), green); /* Standard syntax (must be last) */
+    background-attachment: fixed;
+}
+#header{
+    background-color:#00bfff;
+    background-image: linear-gradient(#4000ff, #aa24d3c2);
+}
+.mycolor:hover{
+    color:rgb(240, 105, 9);
+    border-bottom:1px solid;
+    border-color:maroon;
+}
+.my-modal-title {
+    float:right;
+    direction: rtl;
+    position: absolute;
+    margin-right:35px;
+}
+.my-modal-header {
+    position: relative;
+}
+.selection_body{
+    background-color: beige;
+    min-height: 400px;
+    border-radius: 13px;
+    -webkit-border-radius: 13px;
+    -moz-border-radius: 13px;
+    -ms-border-radius: 13px;
+    -o-border-radius: 13px;
+    border-color:cyan;
+}
+#direction{
+    direction: rtl;
+}
+
+/* for navbar pag */
+.navbar-light .navbar-nav .nav-link{
+    background-color: inherit !important;
+}
+.navbar-light .navbar-nav .nav-link:hover{
+    background-color:slateblue !important;
+}
+.navbar a{
+    color:rgb(196, 203, 207) !important;
+}
+
+

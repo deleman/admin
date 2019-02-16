@@ -1,0 +1,7 @@
+first create form in index.php
+submit form to index.proccess.php
+class using in submit form is in index_p_class.php
+
+1-validate if user admin
+2-start a session admin
+3-show error -welcome or invalid informations
