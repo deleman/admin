@@ -8,16 +8,16 @@ if(isset($_POST['submit_sign_in'])){
     if($index->is_user_admin($_POST)){
         //redirect process
         $errors =$index->show_errors($_POST);
-        echo 'welocme to dashboard';
-
+                                        
+        //start session admin
+        $_SESSION['admin'] = md5('admin');
 
     }else{
 
-        echo 'your are not admin';
-        // $errors =$index->show_errors($_POST);
-        // $url = 'index.php?alert='.$errors[0];
-        // $index->redirect_with_cond($url,true);
-        // $index->redirect_with_cond('index.php?alert=warning',true);
+        $errors =$index->show_errors($_POST);
+        $url = 'index.php?alert='.$errors[0];
+        $index->redirect_with_cond($url,true);
+        $index->redirect_with_cond('index.php?alert=warning',true);
 
     }
     

@@ -14,8 +14,8 @@ $general_info = new show_general_info();
     <?php
     $bool_insert_dot_css=true;
      require_once ('./theme/header.php');
-     if(!isset($_SESSION['user_id'])){
-        header("Location:".URL_ROOT."admin/index.php?alert=invalid");
+     if(!isset($_SESSION['admin'])){
+        header("Location:".URL_ROOT."index.php?alert=invalid");
     }
     ?>
     <link rel="stylesheet" href="./css/show_all.css">
@@ -23,23 +23,8 @@ $general_info = new show_general_info();
 <body>
 
 
-
-<?php require_once ('./theme/navbar.php');  ?>
-            <?php
-            //call function menues
-            navbar_start();
-                if(($submit->sign_of_edit())){
-                    navbar_link('درج اطلاعات','change_selection.php',true);
-                }else{
-                    navbar_link('ثبت اطلاعات','selection.php',true);
-                }
-                navbar_link('تغییر اطلاعات','submit_selection.php',true);
-                navbar_link(' نمایش کلی','show_all.php',true);
-                navbar_link('  راهنما','#',true);
-
-            navbar_destroy();
-  ?>
-        
+<?php require_once ('navbar.php');  ?>
+  
         <?php
     //محاسبه ی تعداد تکرار یک کتاب یا تعداد افراد ی که ی ک کتاب را گرفته اند
     $all_names=Array();

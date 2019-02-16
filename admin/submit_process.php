@@ -1,6 +1,6 @@
 <?php
 require_once('./lib/database.php');
-
+$_SESSION['user_id']=1;
 class submit{
     private $pdo;
     private $sql="select";

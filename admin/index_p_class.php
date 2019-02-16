@@ -1,11 +1,6 @@
 <?php
 require_once ('./lib/database.php');
-define('DB_HOST','localhost');
-define('DB_NAME',"u1");
-define('DB_USER','root');
-define('DB_PASS','');
-define('APP_NAME','پیش انتخاب واحد');
-define('URL_ROOT','http://localhost/u1/');
+
 class sign{
     
     public $db;
@@ -131,6 +126,7 @@ class sign{
             
                 //if number is admin`s number   
                 if($this->get_all_infos()[0]->number == $safe_infos[2]){
+
                     return true;
                 }
             }
@@ -150,10 +146,6 @@ class sign{
         $is_admin = $this->is_user_admin($info);
 
         if($is_admin){
-            
-            //start session admin
-            $_SESSION['admin'] = md5('admin');
-
             //create error success
             return ['success','welocme to dashboard admin'];
 
