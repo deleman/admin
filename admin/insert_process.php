@@ -57,8 +57,10 @@ if(isset($_POST['create'])){
 if(isset($_POST['save'])){
     //get last element of post array
     $save_term = array_pop($_POST['save']);
-    echo $save_term;
-     gettype($_POST['save']);
+    echo count($_POST['save']);
+    echo '<pre>';
+        print_r($_POST['save']);
+    echo '</pre>';
     //insert every element into table
     foreach ($_POST['save'] as $key => $value) {
         $result = $insert->insert_informations($save_term,$value);

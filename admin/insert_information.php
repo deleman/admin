@@ -15,7 +15,7 @@
 <section class="container bg-light mt-1">
 
     <article class="row bg-info">
-        <div class="col-4">
+        <div class="col-lg-4 col-md-5 col-sm-6">
 
         <select class="custom-select" id="term_name" name="term_name">
                 <option selected>ورودی سال</option>

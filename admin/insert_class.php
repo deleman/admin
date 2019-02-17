@@ -51,11 +51,24 @@ class insert{
      * function for create table does not exist now
      */
     public function create($table_name){
+
+        // first -> create a table 
+        //then -> alter table -- change id to primary key and auto_increment
         $table_name = trim(htmlspecialchars(htmlentities($table_name)));
         $table_name = 'year_'.$table_name;
         $sql = " CREATE TABLE $table_name SELECT * FROM SAMPLE;";
         $this->pdo->query($sql);        
-        return $this->pdo->execute();
+        
+        if($this->pdo->execute()){
+
+            //alter table to auto increment and priamry key
+            $sql = "ALTER TABLE `$table_name` CHANGE id id int PRIMARY KEY AUTO_INCREMENT;";
+            $this->pdo->query($sql);        
+            return $this->pdo->execute();
+
+        }else{
+            return false;
+        }
     }
     /***
      * function for insert table created does not exist now
@@ -73,6 +86,9 @@ class insert{
      * function for insert informations into table
      */
     public function insert_informations($table_name,$info){
+        $table_name = 'year_'.htmlspecialchars(htmlentities(trim($table_name)));
+        echo '***************************';
+
         try {
             $sql = "INSERT INTO `$table_name` ( `book_code`, `book_name`, `Theoretical_unit`, `Practical_unit`, `prerequisite`, `book_type`) VALUES (?,?,?,?,?,?)";
         $this->pdo->query($sql);

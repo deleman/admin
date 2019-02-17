@@ -82,10 +82,10 @@ $("#addRow").click(function(e){
         <input id="name${random}" class="form-control"  type="text">
     </td>
     <td>
-        <input id="nazari${random}" class="form-control w-50"  type="text">
+        <input id="nazari${random}" class="form-control" style="min-width:50px !important;"  type="text">
     </td>
     <td>
-        <input id="amali${random}" class="form-control w-50"  type="text">
+        <input id="amali${random}" class="form-control " style="min-width:50px !important;"  type="text">
     </td>
     <td>
         <input id="pishniaz${random}" class="form-control" style="min-width:240px;"  type="text">
@@ -207,12 +207,13 @@ function create(name){
  * 
  */
 //define a array infomations
-let All=Array();
 
 $('#saveInfo').click(function(){
+    let All=Array();
+    
     console.log(supre); 
     let save_term =  $("#term_name").val();    
-    
+        console.log( 'count supre ' + supre.length)
     supre.forEach(element => {
         let infos=Array()
         let code = `#code${element}`;
@@ -232,8 +233,10 @@ $('#saveInfo').click(function(){
 
         let type = `#type${element}`;
         infos.push($(type).val());
+        console.log('foreach');
         All.push(infos)
     });
+    console.log('before push ' + supre)
     // push term name of table 
     All.push(save_term);
 
@@ -253,8 +256,24 @@ $('#saveInfo').click(function(){
         })
         // if data was successfully reutrned
         .done(function(data) {
+            /***
+             * if informations was inserted remove rows contain informations
+             * first => remove rows 
+             * then => create three empty row with fresh code
+             */
+            //first remove all rows
+            supre.filter(element => {
+                $("#"+element).remove();
+            });
+
+            //then create three fresh rows
+            defaultRows();
+            defaultRows();
+            defaultRows();
+
+            
             console.log(data)
-            modal(name, 'bg-success', 'جدول شما با موفقیت ساخته شد.', '',true)
+            modal(name, 'bg-primary', 'اطلاعات شما با موفقیت ثبت شد.', '',true)
         })
         .fail(function() {
             alert( "error" );
@@ -339,13 +358,13 @@ function defaultRows(){
         <input id="name${random}" class="form-control"  type="text">
     </td>
     <td>
-        <input id="nazari${random}" class="form-control w-50"  type="text">
+        <input id="nazari${random}" class="form-control " style="min-width:50px !important;"   type="text">
     </td>
     <td>
-        <input id="amali${random}" class="form-control w-50"  type="text">
+        <input id="amali${random}" class="form-control " style="min-width:50px !important;" type="text">
     </td>
     <td>
-        <input id="pishniaz${random}" class="form-control" style="min-width:240px;"  type="text">
+        <input id="pishniaz${random}" class="form-control" style="min-width:240px !important;"  type="text">
     </td>
 
     `;
