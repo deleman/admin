@@ -40,5 +40,33 @@ if(isset($_POST['addRow'])){
  * 
  */
 if(isset($_POST['create'])){
-    
+
+    $resultOne = $insert->create($_POST['create']);
+    $resultTwo = $insert->insert($_POST['create']);
+    if($resultOne && $resultTwo){
+        echo 'successfully table was created';
+    }else{
+        echo 'erro was eccured';
+    }
+}
+
+
+/**
+ * listen for ajax requrest from save infromations input by admin
+ */
+if(isset($_POST['save'])){
+    //get last element of post array
+    $save_term = array_pop($_POST['save']);
+    echo $save_term;
+     gettype($_POST['save']);
+    //insert every element into table
+    foreach ($_POST['save'] as $key => $value) {
+        $result = $insert->insert_informations($save_term,$value);
+        if($result){
+            echo 'inserted.';
+        }else{
+            echo 'doesnt inserted.';
+        }
+    }
+
 }

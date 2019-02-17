@@ -29,7 +29,7 @@
                     <?php
                         $years = explode('-',$last_value);
                         for($i=$years[0]+1;$i<200;$i++){
-                            $new_year = (string)($i%100).'-'.(string)(($i+1)%100);
+                            $new_year = (string)($i%100).'_'.(string)(($i+1)%100);
                             ?>
                         <option value="<?php echo $new_year; ?>"><?php echo $new_year; ?></option>
 
@@ -57,39 +57,7 @@
                 </tr>
             </thead>  
             <tbody id="tbody">
-                <tr id="mohammad">
-                    <td>
-                        <input id="book_code" class="form-control" type="text">
-                    </td>
-                    <td>
-                        <input id="book_name" class="form-control" type="text">
-                    </td>
-                    <td>
-                        <input id="book_nazari" class="form-control w-50" type="text">
-                    </td>
-                    <td>
-                        <input id="book_amali" class="form-control w-50" type="text">
-                    </td>
-                    <td>
-                        <input id="book_pishniaz" class="form-control" style="min-width:240px;" type="text">
-                    </td>
-                    <td class="" style="min-width:135px;">
-                        <select class="custom-select custom-select-sm">
-                            <option selected>نوع کتاب</option>
-                            <?php foreach($insert->get_all_enumtypes() as $key => $value) { ?>
                 
-                                <?php $trim = str_replace("'",'',$value); ?>
-                                
-                                <option value="<?php echo $trim; ?>"><?php echo $trim; ?> </option>
-
-                            <?php } ?>
-                        </select>
-                    </td>
-
-                    <!-- td for remove curent row -->
-                    <td><button class="btn btn-danger" name="mohammad" id="remove" onclick="Remove(this.name)">remove</button></td>
-                </tr>
-
             </tbody>
             <tfoot>
                 <tr>

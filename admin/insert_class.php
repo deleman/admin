@@ -52,12 +52,36 @@ class insert{
      */
     public function create($table_name){
         $table_name = trim(htmlspecialchars(htmlentities($table_name)));
-        $table_name = 'year'.$table_name;
-        $sql = "CREATE TABLE $table_name SELECT * FROM SAMPLE";
+        $table_name = 'year_'.$table_name;
+        $sql = " CREATE TABLE $table_name SELECT * FROM SAMPLE;";
         $this->pdo->query($sql);        
-        $this->pdo->execute();
+        return $this->pdo->execute();
+    }
+    /***
+     * function for insert table created does not exist now
+     * 
+     */
+    public function insert($table_name){
+        $sql = 'INSERT INTO term_name(name) values(:term_name)';
+        $this->pdo->query($sql);
+        $this->pdo->bind(':term_name',$table_name);
+        return $this->pdo->execute();
     }
 
+
+    /***
+     * function for insert informations into table
+     */
+    public function insert_informations($table_name,$info){
+        try {
+            $sql = "INSERT INTO `$table_name` ( `book_code`, `book_name`, `Theoretical_unit`, `Practical_unit`, `prerequisite`, `book_type`) VALUES (?,?,?,?,?,?)";
+        $this->pdo->query($sql);
+        return $this->pdo->execute($info);
+
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
 
 
 

@@ -56,8 +56,12 @@ class Database{
     }
 
     //execute the prepare statement
-    public function execute(){
+    public function execute($data=null){
+        if($data ==null)
         return $this->smt->execute();
+        if($data !=null){
+            return $this->smt->execute($data);
+        }
     }
 
     //Get result as array of object
