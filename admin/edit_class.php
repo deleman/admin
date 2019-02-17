@@ -47,16 +47,6 @@ class insert{
     }
 
 
-    /***
-     * function for create table does not exist now
-     */
-    public function create($table_name){
-        $table_name = trim(htmlspecialchars(htmlentities($table_name)));
-        $table_name = 'year'.$table_name;
-        $sql = "CREATE TABLE $table_name SELECT * FROM SAMPLE";
-        $this->pdo->query($sql);        
-        $this->pdo->execute();
-    }
 
 
 

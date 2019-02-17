@@ -9,15 +9,8 @@ $insert = new insert();
  * 
  */
 if(isset($_POST['term_name'])){
-    $info = trim(htmlspecialchars($_POST['term_name']));
-    $all_years = $insert->get_all_termnames();
-    if (in_array($info, $all_years)){
-        //was found
-        echo true;
-    }else{
-        //doesnt found
-        echo false;
-    }
+
+    echo print_r($_POST['term_name']);
 }
 
 
@@ -34,11 +27,3 @@ if(isset($_POST['addRow'])){
     }
 }
 
-
-/***
- * listern for ajax request from create table does not exitst
- * 
- */
-if(isset($_POST['create'])){
-    
-}

@@ -1,25 +1,4 @@
 
-/***
- * define a variable modal warnng
- */
-let modalStart = `
-<div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-warning ">
-        <h5 class="modal-title m-auto" id="exampleModalLabel" >`;
-let modalEnd=`</h5>
-        <button type="button" class="close float-right" style="position:absolute;" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body text-right">
-        جدول انتخابی شما وجود ندارد آیا میخواهی آن را بسازی؟
-      </div>
-      <div class="modal-footer text-right">
-        <button type="button" class="btn btn-secondary mr-auto ml-1 px-4" data-dismiss="modal">بستن</button>
-        `;
-
 /**
  * send informations form select select year term name to server
  */
@@ -34,26 +13,15 @@ $("#term_name").change(function(){
         data: { term_name:selected_termname },
         dataType: "html"
     })
-    // if data was successfully reutrned
     .done(function(data) {
-        //if table data is exist
-        if(data){
-            alert('true')
-        }else{
-            let agree = `<button type="button" class="btn btn-primary ml-auto mr-1 px-5" name="${selected_termname}" onclick="create(this.name)">تایید</button>
-                        </div>
-                    </div>
-                    </div>
-                </div>`;
-            $("body").append((modalStart + selected_termname + modalEnd + agree))
-            $('#exampleModal').modal();
-        }
+        alert( "success" );
+        alert(data)
     })
     .fail(function() {
         alert( "error" );
     })
     .always(function() {
-        // alert( "complete" );
+        alert( "complete" );
     });
 
 })
@@ -157,33 +125,6 @@ function Remove(name){
     let h = $(`tr[id=${name}]`).remove()
 
 }
-
-/***
- * agree to create a new table
- * first => creae a table
- * second=> insert term_name into table years
- */
-function create(name){
-    
-    $.ajax({
-        url: "insert_process.php",
-        method: "POST",
-        data: { create: name },
-        dataType: "html"
-    })
-    // if data was successfully reutrned
-    .done(function(data) {
-        alert(data)
-    })
-    .fail(function() {
-        alert( "error" );
-    })
-    .always(function() {
-        // alert( "complete" );
-    });
-}
-
-
 
 
 /**

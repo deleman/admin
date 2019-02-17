@@ -17,7 +17,7 @@
     <article class="row bg-info">
         <div class="col-4">
 
-        <select class="custom-select" id="term_name" name="term_name">
+            <select class="custom-select" id="term_name" name="term_name">
                 <option selected>ورودی سال</option>
                     <?php $last_value =''; ?>
                     <?php foreach($insert->get_all_termnames() as $key => $value) {?>
@@ -29,15 +29,13 @@
                     <?php
                         $years = explode('-',$last_value);
                         for($i=$years[0]+1;$i<200;$i++){
-                            $new_year = (string)($i%100).'-'.(string)(($i+1)%100);
+                            $new_year = $i.'-'.$i+1;
                             ?>
                         <option value="<?php echo $new_year; ?>"><?php echo $new_year; ?></option>
 
                         <?php }
 
                     ?>
-
-                    
             </select>
         </div>
     </article>
@@ -104,12 +102,6 @@
 
 </section>
 
-    
-    <!-- modal to show -->
-    <?php
-    //  require_once ('./theme/modal.php'); 
-     ?>
-    <!-- end modal code -->
 
       <!-- include footer page -->
       <?php include_once('./theme/footer.php'); ?>
