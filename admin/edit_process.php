@@ -80,8 +80,11 @@ if(isset($_POST['save'])){
  */
 if(isset($_POST['table_selected'])){
     
+    //all informations
+
     //validate post data
     $selected_table = htmlspecialchars(htmlentities(trim($_POST['table_selected'])));
     
+    //show informations returned
     echo $insert->get_all_editInformations($selected_table);
 }

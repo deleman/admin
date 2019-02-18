@@ -60,6 +60,14 @@ $("#term_name").change(function(){
         * using function get all information table selected
         */
        show_informtion_table(selected_termname);
+       
+       setTimeout(() => {
+        let table = document.querySelector('table');
+        table.scrollTo(1000,0);  
+       }, 3000);
+       //scroll to left
+       
+        
         
     })
     .fail(function() {
@@ -532,8 +540,39 @@ function show_informtion_table(selected_table){
     })
     // if data was successfully reutrned
     .done(function(data) {
+        
+        //convert sting to array with (,) charachter
+        //split hole string
+        let row= data.split(',');
+            row.pop()
 
-        console.log(data);
+        //define allinfo varable
+        let allInfo= [];
+
+        //convert row string to array with (-)  character
+        row.forEach(element => {
+            
+            allInfo.push(element.split('-'));
+        });
+
+
+        //if data returned has somecontent remove default empty rows
+        if(allInfo.length > 0){
+            
+            $('table tr').remove();
+        }else{
+            //else dont remove empty default rows
+
+        }
+        
+
+
+        //show in page using function defaultRowsWithInfo
+        //show evety row informations with info
+        allInfo.forEach(row => {
+            defaultRowsWithInfo(row);
+        });
+        
 
     })
     .fail(function() {
@@ -545,3 +584,93 @@ function show_informtion_table(selected_table){
     });
 
 }
+
+
+/**
+ * function for create a row with array informations
+ * show one row with info in page
+ * sent info is array
+ */
+function defaultRowsWithInfo(info){
+    //scroll to down
+    scrollWin()
+    
+    //create a random numbers
+    let random = Math.random(0,1000).toString().slice(3,12)
+    supre.push(random)
+
+    let addRow = `
+    <td>
+        <input id="code${random}" class="form-control" value="${info[0]}" type="text"  style="min-width:100px;">
+    </td>
+    <td>
+        <input id="name${random}" class="form-control" value="${info[1]}" type="text" style="min-width:120px;">
+    </td>
+    <td>
+        <input id="nazari${random}" class="form-control " value="${info[2]}" style="min-width:50px !important;"   type="text">
+    </td>
+    <td>
+        <input id="amali${random}" class="form-control " value="${info[3]}" style="min-width:50px !important;" type="text">
+    </td>
+    <td>
+        <input id="pishniaz${random}" class="form-control" value="${info[4]}" style="min-width:240px !important;"  type="text">
+    </td>
+
+    `;
+
+
+
+    //create a conastant varable for add a new row
+    let add = 'addition'
+    $.ajax({
+        url: "edit_process.php",
+        method: "POST",
+        data: { addRow:add },
+        dataType: "html"
+    })
+    .done(function(data) {
+        let types = data.split(',');
+        types.pop();
+        //row start 
+        let rowStart = `<tr id="${random}">`;
+
+        //create a td or cell table thant contain book types
+        let tdStart =`
+        <td class="" style="min-width:135px;">
+            <select class="custom-select custom-select-sm"  id="type${random}">
+                <option selected>نوع کتاب</option>`;
+                
+        //operation on option based on returned value fro serever
+        let td='';
+        types.forEach(element => {
+            let selected = null;
+            if(element == info[5]){
+                selected = 'selected';
+            }
+            td += `<option value="${element}" ${selected} > ${element}</option>`;
+        });  
+        
+        let tdEnd =` 
+            </select>
+        </td>
+        </tr>`;
+
+        // td for remove 
+        let tdRemove = `<td><button class="btn btn-danger" id="remove" onclick="Remove(this.name)" name="${random}">remove</button></td>`;
+
+        //join and concat all slice of data should be appen to tbody table
+        let allInfo = rowStart + addRow + tdStart + td + tdRemove + tdEnd;
+        $("#tbody").append(allInfo);
+    
+        //scroll todown
+        scrollWin()
+        
+    })
+    .fail(function() {
+        console.log( "error" );
+    })
+    .always(function() {
+    });
+
+}
+

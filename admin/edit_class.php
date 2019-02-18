@@ -109,11 +109,45 @@ class insert{
         $this->pdo->query($sql);
         $result = $this->pdo->resultSet();
         if(count($result)){
-            $term_names = Array();
+            $allInfo = Array();
+            
             foreach ($result as $key => $value) {
-                array_push($term_names,$value->name);
+
+                //local array for stroe instance informations
+                $instance = Array(); 
+
+                // [book_code] => 1234567
+                array_push( $instance , $value->book_code);
+
+                // [book_name] => 
+                array_push( $instance , $value->book_name);
+                
+                // [Theoretical_unit] => 3
+                array_push( $instance , $value->Theoretical_unit);
+
+                // [Practical_unit] => 3
+                array_push( $instance , $value->Practical_unit);
+
+                // [prerequisite] => fdasf
+                array_push( $instance , $value->prerequisite);
+
+                // [book_type] => ا
+                array_push( $instance , $value->book_type);
+
+                
+                //push all inctance array informatins into all array infos
+                array_push($allInfo,$instance);
             }
-            return $term_names;
+            
+            //define a string variabel for store all informations
+            $allInformations = '';
+            
+            //convert and fit it to serve
+            foreach ($allInfo as $key => $value) {
+                $allInformations .= implode('-',$value) . ',';
+            }
+
+            return $allInformations;
 
         }else{
             return Array();
