@@ -40,7 +40,8 @@ $("#term_name").change(function(){
     .done(function(data) {
         //if table data is exist
         if(data){
-            alert('true')
+            modal('اخطار !!', 'bg-warning', 'حدول شما از قبل وجود دارد. اطلاعات جدید به آن اظافه میشود..', '',true)
+            
         }else{
             let agree = `<button type="button" class="btn btn-primary ml-auto mr-1 px-5" name="${selected_termname}" onclick="create(this.name)">تایید</button>
                         </div>
@@ -52,7 +53,7 @@ $("#term_name").change(function(){
         }
     })
     .fail(function() {
-        alert( "error" );
+        console.log( "error" );
     })
     .always(function() {
         // alert( "complete" );
@@ -159,14 +160,12 @@ function scrollWin() {
  * removing a elemnt by clicking onit
  */
 function Remove(name){
-    console.log(supre)
+
     supre=supre.filter(el => {
         if(el != name){
             return true;
         }
          })
-
-    console.log(supre)
 
     let h = $(`tr[id=${name}]`).remove()
 
@@ -187,11 +186,11 @@ function create(name){
     })
     // if data was successfully reutrned
     .done(function(data) {
-        console.log(data)
+
         modal(name, 'bg-success', 'جدول شما با موفقیت ساخته شد.', '',true)
     })
     .fail(function() {
-        alert( "error" );
+        console.log( "error" );
     })
     .always(function() {
         // alert( "complete" );
@@ -211,41 +210,122 @@ function create(name){
 $('#saveInfo').click(function(){
     let All=Array();
     
-    console.log(supre); 
     let save_term =  $("#term_name").val();    
-        console.log( 'count supre ' + supre.length)
+    let error = false
     supre.forEach(element => {
         let infos=Array()
-        let code = `#code${element}`;
-        infos.push($(code).val());
 
+        //first input must be integer value
+        
+        let code = `#code${element}`;
+        alert(typeof parseInt($(code).val()));
+        alert( parseInt($(code).val()));
+        if(parseInt($(code).val())){
+
+            if(( ( ( ($(code).val()).toString().length ) > 6 ) && ( ($(code).val()).toString().length) < 9 ) ) {
+                infos.push($(code).val());
+                $(code).css('border','none')   
+                
+            }else{
+                alert($(code).val())
+                // set error to ture
+                error = true
+
+                $(code).css('border','1px solid red')   
+                $(code).attr('title','کد درس باید بین 6 تا 9 عدد باشد'); 
+            }
+        }else{
+            // set error to ture
+            error = true
+
+            $(code).css('border','1px solid red')   
+            $(code).attr('title','مقدار کد درس باید عدد باشد');         
+        }
+
+        //admin can insert any thing
         let name = `#name${element}`;
         infos.push($(name).val());
 
+        //unit value must be integer value
         let nazari = `#nazari${element}`;
-        infos.push($(nazari).val());
+        //must less than 5
+        //must integer
+        if(parseInt($(nazari).val())){
+            if(parseInt(($(nazari).val()))<5){
+                infos.push($(nazari).val());
+                $(nazari).css('border','none')   
 
+            }else{
+                // set error to ture
+                error = true
+            
+                $(nazari).css('border','1px solid red')   
+                $(nazari).attr('title','مقدار واحد نظری باید کمتر از 5 باشد'); 
+            }
+        }else{
+            // set error to ture
+            error = true
+            
+            $(nazari).css('border','1px solid red')   
+            $(nazari).attr('title','واحد نظری باید عدد باشد');         
+        }
+    
+        
+        //unit value must be integer value
         let amali = `#amali${element}`;
-        infos.push($(amali).val());
+        if(parseInt($(amali).val())){
+            if(parseInt(($(amali).val()))<5){
+                infos.push($(amali).val());
+                $(amali).css('border','none')   
+
+            }else{
+                // set error to ture
+                error = true
+            
+                $(amali).css('border','1px solid red')   
+                $(amali).attr('title','مقدار واحد عملی باید کمتر از 5 باشد'); 
+            }
+        }else{
+            // set error to ture
+            error = true
+            
+            $(amali).css('border','1px solid red')   
+            $(amali).attr('title','واحد عملی باید عدد باشد');         
+        }
 
         let pishniaz = `#pishniaz${element}`;
         infos.push($(pishniaz).val());
 
         let type = `#type${element}`;
-        infos.push($(type).val());
-        console.log('foreach');
+        if($(type).val() == 'نوع کتاب'){
+           // set error to ture
+           error = true
+            
+           $(type).css('border','1px solid red')   
+           $(type).attr('title','نوع باید انتخاب شود'); 
+        }else{
+
+            infos.push($(type).val());
+            $(type).css('border','none')   
+
+        }
+
+        //inset all inot all array
         All.push(infos)
     });
-    console.log('before push ' + supre)
     // push term name of table 
     All.push(save_term);
 
     //fileter in table name doesnt selected
-    if(save_term.toString().length>6){
-        modal('خطا !!', 'bg-danger', 'حدول مورد نظر خود را انتخاب کنید ',true)        
+    if( ( save_term.toString().length > 6 ) ){
+        setTimeout(() => {
+            modal('خطا !!', 'bg-danger', 'حدول مورد نظر خود را انتخاب کنید ',true)     
+        }, 1000);
+    }else if(error == true){
+        setTimeout(() => {
+            modal('خطا !!', 'bg-danger', 'برای نمایش ارور روی آن اشاره کنید ',true)     
+        }, 1000);
     }else{        
-        
-        console.log('array infos',All)
         
         //sending infomation by ajax 
         $.ajax({
@@ -272,11 +352,10 @@ $('#saveInfo').click(function(){
             defaultRows();
 
             
-            console.log(data)
             modal(name, 'bg-primary', 'اطلاعات شما با موفقیت ثبت شد.', '',true)
         })
         .fail(function() {
-            alert( "error" );
+            console.log( "error" );
         })
         .always(function() {
             // alert( "complete" );

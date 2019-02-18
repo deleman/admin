@@ -65,8 +65,8 @@
             function navbar_selection($default,$param,$bool){
                 if($bool===true){
         ?>
-           <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <li class="nav-item dropdown ">
+                <a class="nav-link dropdown-toggle  btn btn-lg px-3 py-2  btn-lg " href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <?php echo $default; ?>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
