@@ -218,9 +218,14 @@ function Remove(name){
             })
             // if data was successfully reutrned
             .done(function(data) {
-                modal(name, 'bg-success', 'رکورد مورد نظر شما با موفقیت حذف شد', '',true)
-                //refresh information
-                show_informtion_table($('#term_name').val());
+                if(data){
+                    modal(name, 'bg-success', 'رکورد مورد نظر شما با موفقیت حذف شد', '',true)
+                    //refresh information
+                    show_informtion_table($('#term_name').val());
+                }else{
+                    let h = $(`tr[id=${name}]`).remove()
+
+                }
 
             })
             .fail(function() {
@@ -237,13 +242,15 @@ function Remove(name){
 
             $(code).css('border','1px solid red')   
             $(code).attr('title','کد درس باید بین 6 تا 9 عدد باشد'); 
+            let h = $(`tr[id=${name}]`).remove()
         }
     }else{
         // set error to ture
         error = true
 
         $(code).css('border','1px solid red')   
-        $(code).attr('title','مقدار کد درس باید عدد باشد');         
+        $(code).attr('title','مقدار کد درس باید عدد باشد');   
+        let h = $(`tr[id=${name}]`).remove()      
     }
 
 }
@@ -427,8 +434,6 @@ $('#saveInfo').click(function(){
     }else{        
         $('#term_name').css('border','none')           
         //sending infomation by ajax 
-        console.log('super before send save ', supre )
-        console.log('before send info ' + All)
 
         $.ajax({
             url: "edit_process.php",
@@ -448,7 +453,6 @@ $('#saveInfo').click(function(){
                 $("#"+element).remove();
             });
 
-            console.log('data returned'+data)
 
             //then show all informions 
             show_informtion_table(save_term);
@@ -649,12 +653,9 @@ function show_informtion_table(selected_table){
             * if information was returned
             * remove all super datas
             */
-           console.log( 'allinfo ' + allInfo)
             if(supre.length){
-                console.log(supre)
                 supre=Array();
             }
-            console.log('supre is ' + supre)
 
             $('table tbody tr').remove();
 
@@ -682,7 +683,6 @@ function show_informtion_table(selected_table){
     })
     .fail(function() {
         console.log('errro eccured in return all information table selected.');
-        console.log( "error" );
     })
     .always(function() {
         // alert( "complete" );
