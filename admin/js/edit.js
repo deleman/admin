@@ -35,9 +35,6 @@ $("#term_name").change(function(){
     
     //if selected value is valid
     let numbers = selected_termname.split('_');
-    alert(numbers[0] + '  ' + numbers[1] )
-    alert('one' + parseInt(numbers[0]))
-    alert('two' + parseInt(numbers[1]))
 
     
     if(parseInt(numbers[0]) || parseInt(numbers[0]) == 0){
@@ -241,7 +238,7 @@ function create(name){
 
 $('#saveInfo').click(function(){
     let All=Array();
-    
+    console.log(supre)
     let save_term =  $("#term_name").val();    
     let error = false
     supre.forEach(element => {
@@ -293,6 +290,7 @@ $('#saveInfo').click(function(){
                 }else{
 
                     infos.push($(nazari).val());
+                    infos.push(null);
                     $(nazari).css('border','none')   
                     $(amali).css('border','none')   
                 }
@@ -323,6 +321,7 @@ $('#saveInfo').click(function(){
                 if(parseInt($(amali).val())){
                     if(parseInt(($(amali).val()))<5){
                         infos.push($(amali).val());
+                        infos.push(null);
                         $(amali).css('border','none')   
                         $(nazari).css('border','none')   
 
@@ -384,6 +383,8 @@ $('#saveInfo').click(function(){
     }else{        
         $('#term_name').css('border','none')           
         //sending infomation by ajax 
+        console.log('before send info ' + All)
+
         $.ajax({
             url: "edit_process.php",
             method: "POST",
@@ -398,16 +399,15 @@ $('#saveInfo').click(function(){
              * then => create three empty row with fresh code
              */
             //first remove all rows
-            console.log(data)
             supre.filter(element => {
                 $("#"+element).remove();
             });
 
-            //then create three fresh rows
-            defaultRows();
-            defaultRows();
-            defaultRows();
+            console.log('data returned'+data)
 
+            //then show all informions 
+            show_informtion_table(save_term);
+            
             
             modal(name, 'bg-primary', 'اطلاعات شما با موفقیت ثبت شد.', '',true)
         })
@@ -582,7 +582,7 @@ function show_informtion_table(selected_table){
     })
     // if data was successfully reutrned
     .done(function(data) {
-        
+
         //convert sting to array with (,) charachter
         //split hole string
         let row= data.split(',');
@@ -600,7 +600,17 @@ function show_informtion_table(selected_table){
 
         //if data returned has somecontent remove default empty rows
         if(allInfo.length > 0){
-            
+            /*
+            * if information was returned
+            * remove all super datas
+            */
+           console.log(allInfo)
+            if(supre.length){
+                console.log(supre)
+                supre=Array();
+            }
+            console.log('supre is ' + supre)
+
             $('table tbody tr').remove();
         }else{
             //else dont remove empty default rows
