@@ -40,7 +40,7 @@ $("#term_name").change(function(){
     if(parseInt(numbers[0]) || parseInt(numbers[0]) == 0){
         if(parseInt(numbers[1]) || parseInt(numbers[1]) == 0){
             $.ajax({
-                url: "insert_process.php",
+                url: "edit_process.php",
                 method: "POST",
                 data: { term_name:selected_termname },
                 dataType: "html"
@@ -128,7 +128,7 @@ $("#addRow").click(function(e){
     //create a conastant varable for add a new row
     let add = 'addition'
     $.ajax({
-        url: "insert_process.php",
+        url: "edit_process.php",
         method: "POST",
         data: { addRow:add },
         dataType: "html"
@@ -196,7 +196,55 @@ function Remove(name){
         }
          })
 
-    let h = $(`tr[id=${name}]`).remove()
+    // let h = $(`tr[id=${name}]`).remove()
+
+    //if input in tr with id name has content
+    //then check if is in table
+    //first input must be integer value
+        
+    let code = `#code${name}`;
+    if(parseInt($(code).val())){
+
+        if(( ( ( ($(code).val()).toString().length ) > 6 ) && ( ($(code).val()).toString().length) < 9 ) ) {
+            
+            //set a ajax request to server
+            $(code).css('border','none')  
+            
+            $.ajax({
+                url: "edit_process.php",
+                method: "POST",
+                data: { remove: [$(code).val(),$("#term_name").val()]},
+                dataType: "html"
+            })
+            // if data was successfully reutrned
+            .done(function(data) {
+                modal(name, 'bg-success', 'رکورد مورد نظر شما با موفقیت حذف شد', '',true)
+                //refresh information
+                show_informtion_table($('#term_name').val());
+
+            })
+            .fail(function() {
+                console.log( "error" );
+            })
+            .always(function() {
+                // alert( "complete" );
+            });
+
+            
+        }else{
+            // set error to ture
+            error = true
+
+            $(code).css('border','1px solid red')   
+            $(code).attr('title','کد درس باید بین 6 تا 9 عدد باشد'); 
+        }
+    }else{
+        // set error to ture
+        error = true
+
+        $(code).css('border','1px solid red')   
+        $(code).attr('title','مقدار کد درس باید عدد باشد');         
+    }
 
 }
 
@@ -206,9 +254,8 @@ function Remove(name){
  * second=> insert term_name into table years
  */
 function create(name){
-    alert(name)
     $.ajax({
-        url: "insert_process.php",
+        url: "edit_process.php",
         method: "POST",
         data: { create: name},
         dataType: "html"
@@ -238,7 +285,6 @@ function create(name){
 
 $('#saveInfo').click(function(){
     let All=Array();
-    console.log(supre)
     let save_term =  $("#term_name").val();    
     let error = false
     supre.forEach(element => {
@@ -281,7 +327,6 @@ $('#saveInfo').click(function(){
                 
                 //if amali has content too
                 let amali = `#amali${element}`;
-                alert('amali'+($(amali).val().length))
                 if($(amali).val().length > 0){
                     // set error to ture
                     error = true
@@ -304,7 +349,6 @@ $('#saveInfo').click(function(){
             }
         }else{
             // check if amali has any content
-            alert('nazari'+($(nazari).val().length))
 
             if($(nazari).val().length > 0){
                 // set error to ture
@@ -383,6 +427,7 @@ $('#saveInfo').click(function(){
     }else{        
         $('#term_name').css('border','none')           
         //sending infomation by ajax 
+        console.log('super before send save ', supre )
         console.log('before send info ' + All)
 
         $.ajax({
@@ -514,7 +559,7 @@ function defaultRows(){
     //create a conastant varable for add a new row
     let add = 'addition'
     $.ajax({
-        url: "insert_process.php",
+        url: "edit_process.php",
         method: "POST",
         data: { addRow:add },
         dataType: "html"
@@ -582,7 +627,7 @@ function show_informtion_table(selected_table){
     })
     // if data was successfully reutrned
     .done(function(data) {
-
+        console.log('data=> ' + data)
         //convert sting to array with (,) charachter
         //split hole string
         let row= data.split(',');
@@ -604,7 +649,7 @@ function show_informtion_table(selected_table){
             * if information was returned
             * remove all super datas
             */
-           console.log(allInfo)
+           console.log( 'allinfo ' + allInfo)
             if(supre.length){
                 console.log(supre)
                 supre=Array();
@@ -612,6 +657,14 @@ function show_informtion_table(selected_table){
             console.log('supre is ' + supre)
 
             $('table tbody tr').remove();
+
+            //show information in page
+            //show in page using function defaultRowsWithInfo
+            //show evety row informations with info
+            allInfo.forEach(row => {
+                defaultRowsWithInfo(row);
+            });
+
         }else{
             //else dont remove empty default rows
             $('table tbody tr').remove();
@@ -623,16 +676,12 @@ function show_informtion_table(selected_table){
         
 
 
-        //show in page using function defaultRowsWithInfo
-        //show evety row informations with info
-        allInfo.forEach(row => {
-            defaultRowsWithInfo(row);
-        });
+        
         
 
     })
     .fail(function() {
-        alert('errro eccured in return all information table selected.');
+        console.log('errro eccured in return all information table selected.');
         console.log( "error" );
     })
     .always(function() {
@@ -654,6 +703,14 @@ function defaultRowsWithInfo(info){
     //create a random numbers
     let random = Math.random(0,1000).toString().slice(3,12)
     supre.push(random)
+
+    //condition for number zero
+    if(info[3]=='0'){
+        info[3] = '';
+    }
+    if(info[2]=='0'){
+        info[4] = ''
+    }
 
     let addRow = `
     <td>

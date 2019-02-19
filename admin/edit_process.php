@@ -88,3 +88,15 @@ if(isset($_POST['table_selected'])){
     //show informations returned
     echo $insert->get_all_editInformations($selected_table);
 }
+
+
+/***
+ * listen for ajax requerst remove sepicefic row or record from table
+ * if exist in table remove it
+ */
+if(isset($_POST['remove'])){
+    $data = $_POST['remove'];
+    $data[0] = htmlspecialchars(htmlentities(trim($data[0])));
+    $data[1] = htmlspecialchars(htmlentities(trim($data[1])));
+    echo $insert->remove_row($data[1],$data[0]);
+}

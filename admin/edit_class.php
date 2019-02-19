@@ -158,28 +158,44 @@ class insert{
       /***
      * function for update information in table
      */
-    public function update_informations($table_name,$info){
-        $table_name = 'year_'.htmlspecialchars(htmlentities(trim($table_name)));
+    public function update_informations($table,$info){
+        $table = htmlspecialchars(htmlentities(trim($table)));
+        $table_name = 'year_'.htmlspecialchars(htmlentities(trim($table)));
 
         try {
             // $sql = "UPDATE `$table_name` SET `model` = :model WHERE id = :id";
 
-            $sql = "UPDATE `$table_name` SET";
-            $sql .= " `book_code` = :code ,";
-            $sql .= " `book_name` = :name ,";
-            $sql .= " `Theoretical_unit` = :nazari ,";
-            $sql .= " `Practical_unit` = :amali ,";
-            $sql .= " `prerequisite` = :pre ,";
-            $sql .= " `book_type` = :type ";
+            /**
+             * if current row is exist in table
+             * update it 
+             * else insert it
+             */
+            if($this->get_informations_by_book_code($table,$info[0])){
+                //is exist update it
+                $sql = "UPDATE `$table_name` SET";
+                $sql .= " `book_code` = :code ,";
+                $sql .= " `book_name` = :name ,";
+                $sql .= " `Theoretical_unit` = :nazari ,";
+                $sql .= " `Practical_unit` = :amali ,";
+                $sql .= " `prerequisite` = :pre ,";
+                $sql .= " `book_type` = :type WHERE book_code = :book_code";
+                $this->pdo->query($sql);
+                $this->pdo->bind(':code',$info[0]);
+                $this->pdo->bind(':name',$info[1]);
+                $this->pdo->bind(':nazari',$info[2]);
+                $this->pdo->bind(':amali',$info[3]);
+                $this->pdo->bind(':pre',$info[4]);
+                $this->pdo->bind(':type',$info[5]);
+                $this->pdo->bind(':book_code',$info[0]);
+                return $this->pdo->execute();
+            }else{
+                //dosent exist insert row
+                
+                $sql = "INSERT INTO `$table_name` ( `book_code`, `book_name`, `Theoretical_unit`, `Practical_unit`, `prerequisite`, `book_type`) VALUES (?,?,?,?,?,?)";
+                $this->pdo->query($sql);
+                return $this->pdo->execute($info);
 
-            $this->pdo->query($sql);
-            $this->pdo->bind(':code',$info[0]);
-            $this->pdo->bind(':name',$info[1]);
-            $this->pdo->bind(':nazari',$info[2]);
-            $this->pdo->bind(':amali',$info[3]);
-            $this->pdo->bind(':pre',$info[4]);
-            $this->pdo->bind(':type',$info[5]);
-            return $this->pdo->execute();
+            }
 
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -187,6 +203,43 @@ class insert{
     }
 
 
+     /***
+     * return if row info is exist in sepicefic table by book code
+     * if exist return true 
+     * else return false
+     * 
+     */
+    private function get_informations_by_book_code($year,$code){
+        $sql = "SELECT * FROM year_$year WHERE book_code = :code";
+        $this->pdo->query($sql);
+        $this->pdo->bind(':code',$code);
+        $result = $this->pdo->resultSet();
+        if(count($result)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
+    /***
+     * remove one row by book_code in sepicefic table
+     * remove if exist and return true or false
+     */
+    public function remove_row($year,$code){
+        if($this->get_informations_by_book_code($year,$code)){
+                
+            $sql = "DELETE  FROM year_$year WHERE book_code = :code";
+            $this->pdo->query($sql);
+            $this->pdo->bind(':code',$code);
+            $result = $this->pdo->execute();
+            if(($result)){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
 
 }
