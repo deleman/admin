@@ -29,53 +29,67 @@ let modalEnd=`</h5>
  */
 let selected_termname;
 $("#term_name").change(function(){
-  
+    $('#term_name').css('border','none')       
     //get current selection value
     selected_termname=$("#term_name").val();    
+    
+    //if selected value is valid
+    let numbers = selected_termname.split('_');
+    alert(numbers[0] + '  ' + numbers[1] )
+    alert('one' + parseInt(numbers[0]))
+    alert('two' + parseInt(numbers[1]))
 
-    $.ajax({
-        url: "insert_process.php",
-        method: "POST",
-        data: { term_name:selected_termname },
-        dataType: "html"
-    })
-    // if data was successfully reutrned
-    .done(function(data) {
-        //if table data is exist
-        if(data){
-            modal('اخطار !!', 'bg-warning', 'حدول شما از قبل وجود دارد. اطلاعات جدید به آن اظافه میشود..', '',true)
-            
+    
+    if(parseInt(numbers[0]) || parseInt(numbers[0]) == 0){
+        if(parseInt(numbers[1]) || parseInt(numbers[1]) == 0){
+            $.ajax({
+                url: "insert_process.php",
+                method: "POST",
+                data: { term_name:selected_termname },
+                dataType: "html"
+            })
+            // if data was successfully reutrned
+            .done(function(data) {
+                //if table data is exist
+                if(data){
+                    modal('اخطار !!', 'bg-warning', 'حدول شما از قبل وجود دارد. اطلاعات جدید به آن اظافه میشود..', '',true)
+                    
+                }else{
+                    let agree = `<button type="button" class="btn btn-primary ml-auto mr-1 px-5" name="${selected_termname}" onclick="create(this.name)">تایید</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>`;
+                    $("body").append((modalStart + selected_termname + modalEnd + agree))
+                    $('#exampleModal').modal();
+                }
+        
+                /*
+                * whatevet table exist of not exist
+                * using function get all information table selected
+                */
+               show_informtion_table(selected_termname);
+               
+               setTimeout(() => {
+                let table = document.querySelector('table');
+                table.scrollTo(1000,0);  
+               }, 3000);
+               //scroll to left
+               
+                
+                
+            })
+            .fail(function() {
+                console.log( "error" );
+            })
+            .always(function() {
+                // alert( "complete" );
+            });
         }else{
-            let agree = `<button type="button" class="btn btn-primary ml-auto mr-1 px-5" name="${selected_termname}" onclick="create(this.name)">تایید</button>
-                        </div>
-                    </div>
-                    </div>
-                </div>`;
-            $("body").append((modalStart + selected_termname + modalEnd + agree))
-            $('#exampleModal').modal();
         }
-
-        /*
-        * whatevet table exist of not exist
-        * using function get all information table selected
-        */
-       show_informtion_table(selected_termname);
-       
-       setTimeout(() => {
-        let table = document.querySelector('table');
-        table.scrollTo(1000,0);  
-       }, 3000);
-       //scroll to left
-       
-        
-        
-    })
-    .fail(function() {
-        console.log( "error" );
-    })
-    .always(function() {
-        // alert( "complete" );
-    });
+    }else{
+    }
+   
 
 })
 
@@ -195,7 +209,7 @@ function Remove(name){
  * second=> insert term_name into table years
  */
 function create(name){
-    
+    alert(name)
     $.ajax({
         url: "insert_process.php",
         method: "POST",
@@ -267,8 +281,21 @@ $('#saveInfo').click(function(){
         //must integer
         if(parseInt($(nazari).val())){
             if(parseInt(($(nazari).val()))<5){
-                infos.push($(nazari).val());
-                $(nazari).css('border','none')   
+                
+                //if amali has content too
+                let amali = `#amali${element}`;
+                alert('amali'+($(amali).val().length))
+                if($(amali).val().length > 0){
+                    // set error to ture
+                    error = true
+                    $(amali).css('border','1px solid red')   
+                    $(amali).attr('title','باید یکی از واحد های نظری با عملی را پر کنید.'); 
+                }else{
+
+                    infos.push($(nazari).val());
+                    $(nazari).css('border','none')   
+                    $(amali).css('border','none')   
+                }
 
             }else{
                 // set error to ture
@@ -278,35 +305,47 @@ $('#saveInfo').click(function(){
                 $(nazari).attr('title','مقدار واحد نظری باید کمتر از 5 باشد'); 
             }
         }else{
-            // set error to ture
-            error = true
+            // check if amali has any content
+            alert('nazari'+($(nazari).val().length))
+
+            if($(nazari).val().length > 0){
+                // set error to ture
+                error = true
+                
+                $(nazari).css('border','1px solid red')   
+                $(nazari).attr('title','واحد نظری باید عدد باشد');  
+            }else{
+                //does not have content
             
-            $(nazari).css('border','1px solid red')   
-            $(nazari).attr('title','واحد نظری باید عدد باشد');         
+
+                //unit value must be integer value
+                let amali = `#amali${element}`;
+                if(parseInt($(amali).val())){
+                    if(parseInt(($(amali).val()))<5){
+                        infos.push($(amali).val());
+                        $(amali).css('border','none')   
+                        $(nazari).css('border','none')   
+
+                    }else{
+                        // set error to ture
+                        error = true
+                    
+                        $(amali).css('border','1px solid red')   
+                        $(amali).attr('title','مقدار واحد عملی باید کمتر از 5 باشد'); 
+                    }
+                }else{
+                    // set error to ture
+                    error = true
+                    
+                    $(amali).css('border','1px solid red')   
+                    $(amali).attr('title','واحد عملی باید عدد باشد');         
+                }
+            }
+       
         }
     
         
-        //unit value must be integer value
-        let amali = `#amali${element}`;
-        if(parseInt($(amali).val())){
-            if(parseInt(($(amali).val()))<5){
-                infos.push($(amali).val());
-                $(amali).css('border','none')   
-
-            }else{
-                // set error to ture
-                error = true
-            
-                $(amali).css('border','1px solid red')   
-                $(amali).attr('title','مقدار واحد عملی باید کمتر از 5 باشد'); 
-            }
-        }else{
-            // set error to ture
-            error = true
-            
-            $(amali).css('border','1px solid red')   
-            $(amali).attr('title','واحد عملی باید عدد باشد');         
-        }
+       
 
         let pishniaz = `#pishniaz${element}`;
         infos.push($(pishniaz).val());
@@ -333,18 +372,20 @@ $('#saveInfo').click(function(){
 
     //fileter in table name doesnt selected
     if( ( save_term.toString().length > 6 ) ){
+        $('#term_name').css('border','1px solid red')   
         setTimeout(() => {
             modal('خطا !!', 'bg-danger', 'حدول مورد نظر خود را انتخاب کنید ',true)     
         }, 1000);
     }else if(error == true){
+        $('#term_name').css('border','none')   
         setTimeout(() => {
             modal('خطا !!', 'bg-danger', 'برای نمایش ارور روی آن اشاره کنید ',true)     
         }, 1000);
     }else{        
-        
+        $('#term_name').css('border','none')           
         //sending infomation by ajax 
         $.ajax({
-            url: "insert_process.php",
+            url: "edit_process.php",
             method: "POST",
             data: { save: All },
             dataType: "html"
@@ -357,6 +398,7 @@ $('#saveInfo').click(function(){
              * then => create three empty row with fresh code
              */
             //first remove all rows
+            console.log(data)
             supre.filter(element => {
                 $("#"+element).remove();
             });
@@ -559,10 +601,14 @@ function show_informtion_table(selected_table){
         //if data returned has somecontent remove default empty rows
         if(allInfo.length > 0){
             
-            $('table tr').remove();
+            $('table tbody tr').remove();
         }else{
             //else dont remove empty default rows
+            $('table tbody tr').remove();
 
+            defaultRows();
+            defaultRows();
+            defaultRows();
         }
         
 

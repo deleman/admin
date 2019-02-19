@@ -155,6 +155,32 @@ class insert{
     }
 
 
+      /***
+     * function for update information in table
+     */
+    public function update_informations($table_name,$info){
+        $table_name = 'year_'.htmlspecialchars(htmlentities(trim($table_name)));
+
+        try {
+            // $sql = "UPDATE `$table_name` SET `model` = :model WHERE id = :id";
+
+            $sql = "UPDATE `$table_name` SET";
+            $sql .= " `book_code` = ? ,";
+            $sql .= " `book_name` = ? ,";
+            $sql .= " `Theoretical_unit` = ? ,";
+            $sql .= " `Practical_unit` = ? ,";
+            $sql .= " `prerequisite` = ? ,";
+            $sql .= " `book_type` = ? ,";
+
+            $this->pdo->query($sql);
+            return $this->pdo->execute($info);
+
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+
 
 
 }
