@@ -1,5 +1,5 @@
 <?php
-require_once ('./edit_class.php');
+require_once ('./table_class.php');
 
 //create a instatnce form class insert 
 $insert = new insert();
@@ -98,10 +98,27 @@ if(isset($_POST['remove'])){
     echo $insert->remove_row($data[1],$data[0]);
 }
 
-if(isset($_GET['home'])){
-    echo '<pre>';
-    print_r($insert->get_all_tables());
+/**
+ * listen for ajax request show all tables infromation like 'year_%'
+ * show all tables
+ */
+if(isset($_POST['showTables'])){
+    
+    // $all_info = implode(',',$insert->get_all_tables());
+    foreach($insert->get_all_tables() as $key => $value){
+        foreach($value as $key => $val){
+            echo $val.',';
+        }
+    }
 
-    echo '</pre>';
+}
 
+
+/**
+ * drop table informations
+ * just drop table form database
+ */
+if(isset($_POST['removeTable'])){
+    $info =  htmlspecialchars(htmlentities(trim($_POST['removeTable'])));
+    echo  $insert->removeTable($info);
 }

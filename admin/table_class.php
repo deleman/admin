@@ -247,10 +247,43 @@ class insert{
      */
     public function get_all_tables(){
         $sql = "show tables from  ". DB_NAME ." like 'year_%'";
-        echo $sql;
         $this->pdo->query($sql);
         return $this->pdo->resultSet();
 
-    }    
+    }   
+    
+    /***
+     * function for drop table pressed by admin
+     * just drop one table
+     * this work is so danger for my website
+     */
+    public function removeTable($table){
+
+        $validate = false;
+        if (preg_match("/year_\d_\d/i", $table)) {
+            $validate = true;
+
+        } elseif(preg_match("/year_\d\d_\d\d/i", $table)) {
+            $validate = true;
+
+        } elseif(preg_match("/year_\d_\d\d/i", $table)){
+            $validate = true;
+        
+        } elseif(preg_match("/year_\d\d_\d/i", $table)){
+            $validate = true;
+        
+        }else{
+
+            $validate = false;
+        }
+        if($validate){
+            $sql  = "DROP TABLE $table";
+            $this->pdo->query($sql);
+            return $this->pdo->execute();   
+        }else{
+            return false;
+        }
+            
+    }
 
 }
