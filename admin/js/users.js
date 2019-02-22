@@ -40,7 +40,7 @@ $("#term_name").change(function(){
     if(parseInt(numbers[0]) || parseInt(numbers[0]) == 0){
         if(parseInt(numbers[1]) || parseInt(numbers[1]) == 0){
             $.ajax({
-                url: "edit_process.php",
+                url: "users_process.php",
                 method: "POST",
                 data: { term_name:selected_termname },
                 dataType: "html"
@@ -95,84 +95,98 @@ $("#term_name").change(function(){
  * create row by clicking a button
  * adding a new row for insert informatiosn
  */
-
 $("#addRow").click(function(e){
-    e.preventDefault();
-    scrollWin()
-    
-    //create a random numbers
-    let random = Math.random(0,1000).toString().slice(3,12)
-    supre.push(random)
-
-    let addRow = `
-    <td>
-        <input id="code${random}" class="form-control"  type="text">
-    </td>
-    <td>
-        <input id="name${random}" class="form-control"  type="text">
-    </td>
-    <td>
-        <input id="nazari${random}" class="form-control" style="min-width:50px !important;"  type="text">
-    </td>
-    <td>
-        <input id="amali${random}" class="form-control " style="min-width:50px !important;"  type="text">
-    </td>
-    <td>
-        <input id="pishniaz${random}" class="form-control" style="min-width:240px;"  type="text">
-    </td>
-
-    `;
-
-
-
-    //create a conastant varable for add a new row
-    let add = 'addition'
-    $.ajax({
-        url: "edit_process.php",
-        method: "POST",
-        data: { addRow:add },
-        dataType: "html"
-    })
-    .done(function(data) {
-        let types = data.split(',');
-        types.pop();
-        //row start 
-        let rowStart = `<tr id="${random}">`;
-
-        //create a td or cell table thant contain book types
-        let tdStart =`
-        <td class="" style="min-width:135px;">
-            <select class="custom-select custom-select-sm"  id="type${random}">
-                <option selected>نوع کتاب</option>`;
-                
-        //operation on option based on returned value fro serever
-        let td='';
-        types.forEach(element => {
-            td += `<option value="${element}" > ${element}</option>`;
-        });  
-        
-        let tdEnd =` 
-            </select>
-        </td>
-        </tr>`;
-
-        // td for remove 
-        let tdRemove = `<td><button class="btn btn-danger" id="remove" onclick="Remove(this.name)" name="${random}">remove</button></td>`;
-
-        //join and concat all slice of data should be appen to tbody table
-        let allInfo = rowStart + addRow + tdStart + td + tdRemove + tdEnd;
-        $("#tbody").append(allInfo);
-    
-        scrollWin()
-        
-    })
-    .fail(function() {
-        console.log( "error" );
-    })
-    .always(function() {
-    });
-
+    defaultRows();
 })
+
+/**
+ * edit a user information
+ * edit a row in page
+ */
+let out;
+let s;
+function edit(name){
+    let real = `name${name}`
+
+    s = $(`input[id="${real}"]`)[0]
+
+    let edit = `edit${name}`;
+    if(s.hasAttribute('disabled')){
+        $(`.${edit}`)[0].innerText = 'save';
+
+        let realName = `name${name}`
+        $(`input[id="${realName}"]`)[0]
+        $(`input[id="${realName}"]`)[0].removeAttribute('disabled')
+    
+        let nazari = `nazari${name}`
+        $(`input[id="${nazari}"]`)[0].removeAttribute('disabled')
+    
+        let amali = `amali${name}`
+        $(`input[id="${amali}"]`)[0].removeAttribute('disabled')
+
+    }else{
+        $(`.${edit}`)[0].innerText = 'edit';
+
+        realName = `name${name}`
+        $(`input[id="${realName}"]`)[0].setAttribute('disabled','')
+        // get name value
+        username = $(`input[id="${realName}"]`)[0].value;
+    
+        nazari = `nazari${name}`
+        $(`input[id="${nazari}"]`)[0].setAttribute('disabled','')
+        //get lname value 
+        lname = $(`input[id="${nazari}"]`)[0].value
+
+        amali = `amali${name}`
+        $(`input[id="${amali}"]`)[0].setAttribute('disabled','')
+        number = $(`input[id="${amali}"]`)[0].value
+
+        //get id value
+        let id = `id${name}`
+        let idValue = $(`input[id="${id}"]`)[0].value;
+        alert(idValue)
+
+        // change user info in table
+        // send request by ajax
+        $.ajax({
+            url: "users_process.php",
+            method: "POST",
+            data: { saveUser: [username,lname,number,idValue]},
+            dataType: "html"
+        })
+        // if data was successfully reutrned
+        .done(function(data) {
+            alert(data)
+            if(data){
+                let headInfo = username + ' ' + lname + ' ' + number;
+                modal(headInfo, 'bg-success', 'اطلاعات کاربر آپدیت شد', '',true)
+
+            }else{
+                modal('خطا !!', 'bg-success', 'خطا در آپدیت شدن اطلاعات کابر.', '',true)
+
+            }
+        })
+        .fail(function() {
+
+            
+        })
+        .always(function() {
+            // alert( "complete" );
+        });
+
+    }
+
+
+
+    //change edit to save
+    //if input has disable attribute set to save
+    //else set to edit
+  
+    edit = `edit${name}`;
+    out = $(`.${edit}`);
+
+}
+
 
 
 /**
@@ -211,7 +225,7 @@ function Remove(name){
             $(code).css('border','none')  
             
             $.ajax({
-                url: "edit_process.php",
+                url: "users_process.php",
                 method: "POST",
                 data: { remove: [$(code).val(),$("#term_name").val()]},
                 dataType: "html"
@@ -262,7 +276,7 @@ function Remove(name){
  */
 function create(name){
     $.ajax({
-        url: "edit_process.php",
+        url: "users_process.php",
         method: "POST",
         data: { create: name},
         dataType: "html"
@@ -436,7 +450,7 @@ $('#saveInfo').click(function(){
         //sending infomation by ajax 
 
         $.ajax({
-            url: "edit_process.php",
+            url: "users_process.php",
             method: "POST",
             data: { save: All },
             dataType: "html"
@@ -522,9 +536,11 @@ $('#saveInfo').click(function(){
  */
 
 $(document).ready(function(){
-    defaultRows();
-    defaultRows();
-    defaultRows();
+    // defaultRows();
+
+    //get and show all users for admin  
+    show_informtion_table();
+
 });
  
 
@@ -539,23 +555,24 @@ function defaultRows(){
     let random = Math.random(0,1000).toString().slice(3,12)
     supre.push(random)
 
-    let addRow = `
-    <td>
-        <input id="code${random}" class="form-control"  type="text">
-    </td>
+    //get last number of userid
+    let lastTr =$('table tbody tr').last();
+    let hidden = lastTr[0].firstElementChild
+    let userId = hidden.lastElementChild.value
+    userId = parseInt(userId) + 1;
+
+    let startTds = `
     <td>
         <input id="name${random}" class="form-control"  type="text">
-    </td>
-    <td>
-        <input id="nazari${random}" class="form-control " style="min-width:50px !important;"   type="text">
-    </td>
-    <td>
-        <input id="amali${random}" class="form-control " style="min-width:50px !important;" type="text">
-    </td>
-    <td>
-        <input id="pishniaz${random}" class="form-control" style="min-width:240px !important;"  type="text">
-    </td>
+        <input id="id${random}" class="form-control" value="${userId}" type="hidden" style="min-width:120px;" disabled>
 
+    </td>
+    <td>
+        <input id="nazari${random}" class="form-control"  type="text">
+    </td>
+    <td>
+        <input id="amali${random}" class="form-control " style="min-width:50px !important;"   type="text">
+    </td>
     `;
 
 
@@ -563,7 +580,7 @@ function defaultRows(){
     //create a conastant varable for add a new row
     let add = 'addition'
     $.ajax({
-        url: "edit_process.php",
+        url: "users_process.php",
         method: "POST",
         data: { addRow:add },
         dataType: "html"
@@ -574,28 +591,15 @@ function defaultRows(){
         //row start 
         let rowStart = `<tr id="${random}">`;
 
-        //create a td or cell table thant contain book types
-        let tdStart =`
-        <td class="" style="min-width:135px;">
-            <select class="custom-select custom-select-sm"  id="type${random}">
-                <option selected>نوع کتاب</option>`;
-                
-        //operation on option based on returned value fro serever
-        let td='';
-        types.forEach(element => {
-            td += `<option value="${element}" > ${element}</option>`;
-        });  
-        
-        let tdEnd =` 
-            </select>
-        </td>
+        let rowEnd =` 
         </tr>`;
 
         // td for remove 
+        let tdEdit = `<td><button class="btn btn-info px-3 edit edit${random}" onclick="edit(this.name)" name="${random}">edit</button></td>`;
         let tdRemove = `<td><button class="btn btn-danger" id="remove" onclick="Remove(this.name)" name="${random}">remove</button></td>`;
 
         //join and concat all slice of data should be appen to tbody table
-        let allInfo = rowStart + addRow + tdStart + td + tdRemove + tdEnd;
+        let allInfo = rowStart + startTds  +  tdEdit + tdRemove + rowEnd;
         $("#tbody").append(allInfo);
     
         //scroll todown
@@ -624,19 +628,19 @@ function show_informtion_table(selected_table){
     * sent request for loading all information was inserted in table selected
     */
     $.ajax({
-        url: "edit_process.php",
+        url: "users_process.php",
         method: "POST",
         data: { table_selected : selected_table},
         dataType: "html"
     })
     // if data was successfully reutrned
     .done(function(data) {
-        console.log('data=> ' + data)
         //convert sting to array with (,) charachter
         //split hole string
         let row= data.split(',');
-            row.pop()
-
+        row.pop()
+        
+        console.log('typeof' + typeof row)
         //define allinfo varable
         let allInfo= [];
 
@@ -704,39 +708,25 @@ function defaultRowsWithInfo(info){
     let random = Math.random(0,1000).toString().slice(3,12)
     supre.push(random)
 
-    //condition for number zero
-    if(info[3]=='0'){
-        info[3] = '';
-    }
-    if(info[2]=='0'){
-        info[4] = ''
-    }
-
     let addRow = `
     <td>
-        <input id="code${random}" class="form-control" value="${info[0]}" type="text"  style="min-width:100px;">
+        <input id="name${random}" class="form-control" value="${info[1]}" type="text" style="min-width:120px;" disabled>
+        <input id="id${random}" class="form-control" value="${info[0]}" type="hidden" style="min-width:120px;" disabled>
     </td>
     <td>
-        <input id="name${random}" class="form-control" value="${info[1]}" type="text" style="min-width:120px;">
+        <input id="nazari${random}" class="form-control " value="${info[2]}" style="min-width:50px !important;"   type="text" disabled>
     </td>
     <td>
-        <input id="nazari${random}" class="form-control " value="${info[2]}" style="min-width:50px !important;"   type="text">
+        <input id="amali${random}" class="form-control " value="${info[3]}" style="min-width:50px !important;" type="text" disabled>
     </td>
-    <td>
-        <input id="amali${random}" class="form-control " value="${info[3]}" style="min-width:50px !important;" type="text">
-    </td>
-    <td>
-        <input id="pishniaz${random}" class="form-control" value="${info[4]}" style="min-width:240px !important;"  type="text">
-    </td>
-
     `;
 
 
 
-    //create a conastant varable for add a new row
+    //create a constant varable for add a new row
     let add = 'addition'
     $.ajax({
-        url: "edit_process.php",
+        url: "users_process.php",
         method: "POST",
         data: { addRow:add },
         dataType: "html"
@@ -747,32 +737,17 @@ function defaultRowsWithInfo(info){
         //row start 
         let rowStart = `<tr id="${random}">`;
 
-        //create a td or cell table thant contain book types
-        let tdStart =`
-        <td class="" style="min-width:135px;">
-            <select class="custom-select custom-select-sm"  id="type${random}">
-                <option selected>نوع کتاب</option>`;
-                
-        //operation on option based on returned value fro serever
-        let td='';
-        types.forEach(element => {
-            let selected = null;
-            if(element == info[5]){
-                selected = 'selected';
-            }
-            td += `<option value="${element}" ${selected} > ${element}</option>`;
-        });  
-        
         let tdEnd =` 
-            </select>
-        </td>
         </tr>`;
 
-        // td for remove 
+        //td for edit user
+        let tdEdit = `<td><button class="btn btn-info px-3 edit edit${random}" onclick="edit(this.name)" name="${random}">edit</button></td>`;
+
+        // td for remove user
         let tdRemove = `<td><button class="btn btn-danger" id="remove" onclick="Remove(this.name)" name="${random}">remove</button></td>`;
 
         //join and concat all slice of data should be appen to tbody table
-        let allInfo = rowStart + addRow + tdStart + td + tdRemove + tdEnd;
+        let allInfo = rowStart + addRow + tdEdit + tdRemove + tdEnd;
         $("#tbody").append(allInfo);
     
         //scroll todown
@@ -783,6 +758,78 @@ function defaultRowsWithInfo(info){
         console.log( "error" );
     })
     .always(function() {
+    });
+
+}
+
+/**
+ * function for get all users in database
+ * show all users in page
+ */
+function show_informtion_table(){
+
+    /*
+    * sent request for loading all information was inserted in users table selected
+    */
+    $.ajax({
+        url: "users_process.php",
+        method: "POST",
+        data: { showUsers: 'showUsers' },
+        dataType: "html"
+    })
+    // if data was successfully reutrned
+    .done(function(data) {
+        //convert sting to array with (,) charachter
+        //split hole string
+        let row = data.split(',');
+        row.pop()
+        
+        console.log(row)
+        //define allinfo varable
+        let allInfo= [];
+
+        //convert row string to array with (-)  character
+        row.forEach(element => {
+            
+            allInfo.push(element.split('-'));
+        });
+
+        console.log(allInfo)
+
+        //if data returned has somecontent remove default empty rows
+        if(allInfo.length > 0){
+            /*
+            * if information was returned
+            * remove all super datas
+            */
+            if(supre.length){
+                supre=Array();
+            }
+
+            $('table tbody tr').remove();
+
+            //show information in page
+            //show in page using function defaultRowsWithInfo
+            //show evety row informations with info
+            allInfo.forEach(row => {
+                defaultRowsWithInfo(row);
+            });
+
+        }else{
+            //else dont remove empty default rows
+            $('table tbody tr').remove();
+
+            defaultRows();
+            defaultRows();
+            defaultRows();
+        }
+
+    })
+    .fail(function() {
+        console.log('errro eccured in return all information table selected.');
+    })
+    .always(function() {
+        // alert( "complete" );
     });
 
 }

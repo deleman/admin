@@ -72,18 +72,22 @@ if(isset($_POST['save'])){
 
 
 /***
- * listen for ajax requerst from show_all informations table selected by admin
- * get all informations from table selected
+ * listen for ajax requerst from show_all users information
+ * get all informations from user table
  */
-if(isset($_POST['table_selected'])){
+if(isset($_POST['showUsers'])){
     
     //all informations
 
     //validate post data
-    $selected_table = htmlspecialchars(htmlentities(trim($_POST['table_selected'])));
+    $selected_table = htmlspecialchars(htmlentities(trim($_POST['showUsers'])));
     
-    //show informations returned
-    echo $insert->get_all_editInformations($selected_table);
+    if($selected_table == 'showUsers'){
+
+        //show informations returned
+        echo $insert->get_all_editInformations();
+
+    }
 }
 
 
@@ -98,10 +102,32 @@ if(isset($_POST['remove'])){
     echo $insert->remove_row($data[1],$data[0]);
 }
 
+/**
+ * listen for ajax request home
+ */
 if(isset($_GET['home'])){
     echo '<pre>';
     print_r($insert->get_all_tables());
 
     echo '</pre>';
+
+}
+
+/**
+ * listen for ajax request edit informations user
+ * update information one user
+ */
+if(isset($_POST['saveUser'])){
+    $info = Array();
+    foreach ($_POST['saveUser'] as $key => $value) {
+        array_push($info,htmlspecialchars(htmlentities(trim($value))));
+    }
+
+    //using method update info in database
+    if($insert->updateUser($info)){
+        echo true;
+    }else{
+        echo false;
+    }
 
 }

@@ -101,11 +101,11 @@ class insert{
 
 
     /***
-     * get all information from year selected by admin for edit informations page
-     * 
+     * get all users informations
+     * show all users for admin in page 
      */
-    public function get_all_editInformations($year){
-        $sql = "SELECT * FROM year_$year";
+    public function get_all_editInformations(){
+        $sql = "SELECT * FROM USERS";
         $this->pdo->query($sql);
         $result = $this->pdo->resultSet();
         if(count($result)){
@@ -116,23 +116,17 @@ class insert{
                 //local array for stroe instance informations
                 $instance = Array(); 
 
-                // [book_code] => 1234567
-                array_push( $instance , $value->book_code);
+                // [id] => 1
+                array_push( $instance , $value->id);
 
-                // [book_name] => 
-                array_push( $instance , $value->book_name);
+                // [name] => 
+                array_push( $instance , $value->name);
                 
-                // [Theoretical_unit] => 3
-                array_push( $instance , $value->Theoretical_unit);
+                // [lname] => 3
+                array_push( $instance , $value->fname);
 
-                // [Practical_unit] => 3
-                array_push( $instance , $value->Practical_unit);
-
-                // [prerequisite] => fdasf
-                array_push( $instance , $value->prerequisite);
-
-                // [book_type] => ا
-                array_push( $instance , $value->book_type);
+                // [number] => 3
+                array_push( $instance , $value->number);
 
                 
                 //push all inctance array informatins into all array infos
@@ -251,6 +245,69 @@ class insert{
         $this->pdo->query($sql);
         return $this->pdo->resultSet();
 
-    }    
+    }   
+    
+    
+    /***
+     * method for update one user informations 
+     * update user selected by admin
+     */
+    public function updateUser($info){
 
+        //if user exist update if not insert it
+        // if exist update it
+        $id=null;
+        if(count($info)>3){
+            $id = $info[3];
+        }
+        if($this->is_user_exist($info[2],$id)){
+
+            $sql = "UPDATE `users` SET";
+            $sql .= " `name` = :name ,";
+            $sql .= " `fname` = :fname ,";
+            $sql .= " `number` = :number WHERE number = :number";
+            $this->pdo->query($sql);
+            $this->pdo->bind(':name',$info[0]);
+            $this->pdo->bind(':fname',$info[1]);
+            $this->pdo->bind(':number',$info[2]);
+            $this->pdo->bind(':number',$info[2]);
+            return $this->pdo->execute();
+        
+        }else{
+            
+            $sql = 'INSERT INTO USERS(name,fname,number) values(:st_name,:st_fname,:st_number)';
+            $this->pdo->query($sql);
+            $this->pdo->bind(':st_name',$info[0]);
+            $this->pdo->bind(':st_fname',$info[1]);
+            $this->pdo->bind(':st_number',$info[2]);
+            return $this->pdo->execute();
+        }
+        
+    }
+
+    /**
+     * function for check if user is exist
+     * is_user_exist
+     */
+    public function is_user_exist($number,$id=null){
+
+        if($id == null){
+            $sql = "SELECT * FROM USERS WHERE number = :st_number";
+            $this->pdo->query($sql);
+            $this->pdo->bind(':st_number',htmlspecialchars(trim($number)));
+            $result = $this->pdo->resultSet();
+            return count($result);    
+
+        }else{
+
+            $sql = "SELECT * FROM USERS WHERE id = :id AND number = :st_number";
+            $this->pdo->query($sql);
+            $this->pdo->bind(':id',htmlspecialchars(trim($id)));
+            $this->pdo->bind(':st_number',htmlspecialchars(trim($number)));
+            
+            $result = $this->pdo->resultSet();
+            return count($result);
+
+        }
+    }
 }
