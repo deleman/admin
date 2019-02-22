@@ -47,13 +47,13 @@
         
             <thead>
                 <tr class="bg-secondary">
-                    <th>کد درس</th>
-                    <th>نام درس</th>
-                    <th> نظری</th>
+                    <th>نام </th>
+                    <th>نام خانوادگی</th>
+                    <th> شماره دانشجویی</th>
                     <th> عملی</th>
                     <th>پیش نیاز</th>
-                    <th>نوع</th>
-                    <td>تعدادد فراد</td>
+                    <th>ویرایش دانشجو</th>
+                    <td>حذف دانشجو</td>
                 </tr>
             </thead>  
             <tbody id="tbody">
