@@ -43,7 +43,7 @@
     </article>
 
     <article class="">
-        <table class="pr-5  table table-primary text-right  bordered table-hover table-responsive text-dark  table-striped text-nowrap table-fixed">
+        <table class="pr-5  table table-primary text-right  bordered table-hover table-responsive text-dark  table-striped text-nowrap table-fixed" >
         
             <thead>
                 <tr class="bg-secondary">

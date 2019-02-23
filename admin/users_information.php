@@ -60,7 +60,6 @@
             <tfoot>
                 <tr>
                     <td><button class="btn btn-info" id="addRow">Add New </button></td>
-                    <td><button class="btn btn-primary w-100" id="saveInfo">save </button></td>
                     <th>#</th>
                 </tr>
             </tfoot>

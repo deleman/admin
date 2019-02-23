@@ -216,7 +216,8 @@ function Remove(name){
     //then check if is in table
     //first input must be integer value
         
-    let code = `#code${name}`;
+    //get user id
+    let code = `#id${name}`;
     if(parseInt($(code).val())){
 
         if(( ( ( ($(code).val()).toString().length ) > 6 ) && ( ($(code).val()).toString().length) < 9 ) ) {
@@ -256,7 +257,7 @@ function Remove(name){
 
             $(code).css('border','1px solid red')   
             $(code).attr('title','کد درس باید بین 6 تا 9 عدد باشد'); 
-            let h = $(`tr[id=${name}]`).remove()
+            let h = $(`tr[id=${name}]`).remove() 
         }
     }else{
         // set error to ture

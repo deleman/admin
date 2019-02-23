@@ -9,7 +9,6 @@
 </head>
 <?php
 require_once ('./index_proccess.php');
-        echo $_SESSION['admin'];
 require_once ('./show_all.php');
 ?>
 
