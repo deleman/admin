@@ -3,7 +3,7 @@ body{
     background-repeat: no-repeat;
     min-height: 600px;
     background-color: teal; /* For browsers that do not support gradients */
-    background-image: radial-gradient(red, rgb(0, 128, 255), green); /* Standard syntax (must be last) */
+    background-image: radial-gradient(red, rgb(0, 128, 255), green); /*Standard syntax (must be last)*/
     background-size: contain;
 }
 #body{

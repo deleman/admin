@@ -70,29 +70,33 @@ $general_info = new show_general_info();
 
     <!-- نمایش اطلاعات کلی -->
     <article class="">
-    <table class="pr-5 table table-primary text-right  bordered table-hover table-responsive text-dark  table-striped text-nowrap table-fixed" style="min-height:350px;">
-   
-    <thead>
-        <tr class="bg-secondary">
-            <th>کد درس</th>
-            <th>نام درس</th>
-            <th> نظری</th>
-            <th> عملی</th>
-            <th>پیش نیاز</th>
-            <th>نوع</th>
-            <td>تعدادد فراد</td>
-        </tr>
-        </thead>    
-    <?php
-           foreach($all_names as $key => $value){
-                echo '<tr>';
-                    foreach($value as $k => $v){
-                        echo '<td>'.$v.'</td>';
-                    }
-                echo '</tr>';
-           }
-           ?> 
-    </table>
+        <div class="table-responsive d-flex justify-content-center">
+            <table class="table  text-right align-center bordered table-hover table-responsive table-striped text-nowrap table-fixed w-auto showAlll  ">
+        
+            <thead>
+                <tr class="bg-primary">
+                    <th>کد درس</th>
+                    <th>نام درس</th>
+                    <th> نظری</th>
+                    <th> عملی</th>
+                    <th>پیش نیاز</th>
+                    <th>نوع</th>
+                    <td>تعدادد فراد</td>
+                </tr>
+            </thead>    
+            <tbody
+            <?php
+                foreach($all_names as $key => $value){
+                        echo "<tr >";
+                            foreach($value as $k => $v){
+                                echo '<td>'.$v.'</td>';
+                            }
+                        echo '</tr>';
+                }
+                ?> 
+            </tbody>
+        </table>
+    </div>
 </article>
 
 
