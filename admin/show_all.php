@@ -70,7 +70,7 @@ $general_info = new show_general_info();
 
     <!-- نمایش اطلاعات کلی -->
     <article class="">
-        <div class="table-responsive d-flex justify-content-center">
+        <div class="table-responsive d-flex justify-content-center mt-3">
             <table class="table  text-right align-center bordered table-hover table-responsive table-striped text-nowrap table-fixed w-auto showAlll  ">
         
             <thead>
