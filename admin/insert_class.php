@@ -86,6 +86,9 @@ class insert{
      * function for insert informations into table
      */
     public function insert_informations($table_name,$info){
+        echo '<pre>';
+            print_r($info);
+        echo '</pre>';
         $table_name = 'year_'.htmlspecialchars(htmlentities(trim($table_name)));
         echo '***************************';
 

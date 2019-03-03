@@ -218,8 +218,6 @@ $('#saveInfo').click(function(){
         //first input must be integer value
         
         let code = `#code${element}`;
-        alert(typeof parseInt($(code).val()));
-        alert( parseInt($(code).val()));
         if(parseInt($(code).val())){
 
             if(( ( ( ($(code).val()).toString().length ) > 6 ) && ( ($(code).val()).toString().length) < 9 ) ) {
@@ -227,7 +225,7 @@ $('#saveInfo').click(function(){
                 $(code).css('border','none')   
                 
             }else{
-                alert($(code).val())
+                
                 // set error to ture
                 error = true
 
@@ -248,13 +246,32 @@ $('#saveInfo').click(function(){
 
         //unit value must be integer value
         let nazari = `#nazari${element}`;
+        let amali = `#amali${element}`;
+
         //must less than 5
         //must integer
         if(parseInt($(nazari).val())){
             if(parseInt(($(nazari).val()))<5){
-                infos.push($(nazari).val());
-                $(nazari).css('border','none')   
-
+        
+                //if amali was inserted
+                if(($(amali).val())){
+                    $(nazari).css('border','1px solid red')   
+                    $(nazari).attr('title','باید یکی از واحد های نظری یا عملی پر شود'); 
+        
+                    $(amali).css('border','1px solid red')   
+                    $(amali).attr('title','باید یکی از واحد های نظری یا عملی پر شود'); 
+                }else{
+                    //clear warning 
+                    $(nazari).css('border','none') 
+                    $(amali).css('border','none') 
+        
+                    infos.push($(nazari).val());
+                    infos.push($(amali).val());
+        
+                }
+                
+                 
+                
             }else{
                 // set error to ture
                 error = true
@@ -264,33 +281,41 @@ $('#saveInfo').click(function(){
             }
         }else{
             // set error to ture
-            error = true
             
-            $(nazari).css('border','1px solid red')   
-            $(nazari).attr('title','واحد نظری باید عدد باشد');         
-        }
-    
+            //if nazari value does not inserted
+            /******************************/
+            //unit value must be integer value
+            
+            if(parseInt($(amali).val())){
+                if(parseInt(($(amali).val()))<5){
+                    
+                    //clear warning 
+                    $(nazari).css('border','none') 
+                    $(amali).css('border','none') 
         
-        //unit value must be integer value
-        let amali = `#amali${element}`;
-        if(parseInt($(amali).val())){
-            if(parseInt(($(amali).val()))<5){
-                infos.push($(amali).val());
-                $(amali).css('border','none')   
-
+                    infos.push($(nazari).val());
+                    infos.push($(amali).val());
+        
+                }else{
+                    // set error to ture
+                    error = true
+                
+                    $(amali).css('border','1px solid red')   
+                    $(amali).attr('title','مقدار واحد عملی باید کمتر از 5 باشد'); 
+                }
             }else{
                 // set error to ture
                 error = true
-            
+                
+                $(nazari).css('border','1px solid red')   
+                $(nazari).attr('title','باید یکی از واحد های نظری یا عملی پر شود'); 
+        
                 $(amali).css('border','1px solid red')   
-                $(amali).attr('title','مقدار واحد عملی باید کمتر از 5 باشد'); 
+                $(amali).attr('title','باید یکی از واحد های نظری یا عملی پر شود');  
+                       
             }
-        }else{
-            // set error to ture
-            error = true
+        
             
-            $(amali).css('border','1px solid red')   
-            $(amali).attr('title','واحد عملی باید عدد باشد');         
         }
 
         let pishniaz = `#pishniaz${element}`;
@@ -309,7 +334,7 @@ $('#saveInfo').click(function(){
             $(type).css('border','none')   
 
         }
-
+        console.log(infos)
         //inset all inot all array
         All.push(infos)
     });
@@ -326,8 +351,10 @@ $('#saveInfo').click(function(){
             modal('خطا !!', 'bg-danger', 'برای نمایش ارور روی آن اشاره کنید ',true)     
         }, 1000);
     }else{        
-        
-        //sending infomation by ajax 
+        alert('some thing')
+        //sending infomation by ajax
+        console.log('all informations before send with ajax')
+        console.log(All);
         $.ajax({
             url: "insert_process.php",
             method: "POST",
@@ -345,7 +372,7 @@ $('#saveInfo').click(function(){
             supre.filter(element => {
                 $("#"+element).remove();
             });
-
+            console.log(data)
             //then create three fresh rows
             defaultRows();
             defaultRows();
