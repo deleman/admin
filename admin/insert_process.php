@@ -63,6 +63,7 @@ if(isset($_POST['save'])){
     echo '</pre>';
     //insert every element into table
     foreach ($_POST['save'] as $key => $value) {
+        echo $value;
         $result = $insert->insert_informations($save_term,$value);
         if($result){
             echo 'inserted.';

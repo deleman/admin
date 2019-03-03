@@ -699,7 +699,7 @@ function show_informtion_table(selected_table){
 function defaultRowsWithInfo(info){
     //scroll to down
     scrollWin()
-    
+    console.log(info)
     //create a random numbers
     let random = Math.random(0,1000).toString().slice(3,12)
     supre.push(random)

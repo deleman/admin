@@ -94,8 +94,8 @@ class insert{
 
         try {
             $sql = "INSERT INTO `$table_name` ( `book_code`, `book_name`, `Theoretical_unit`, `Practical_unit`, `prerequisite`, `book_type`) VALUES (?,?,?,?,?,?)";
-        $this->pdo->query($sql);
-        return $this->pdo->execute($info);
+            $this->pdo->query($sql);
+            return $this->pdo->execute($info);
 
         } catch (PDOException $e) {
             echo $e->getMessage();

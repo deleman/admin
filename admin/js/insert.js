@@ -377,7 +377,9 @@ $('#saveInfo').click(function(){
             defaultRows();
             defaultRows();
             defaultRows();
-
+            setTimeout(() => {
+                window.location.reload();
+            }, 1200);
             
             modal(name, 'bg-primary', 'اطلاعات شما با موفقیت ثبت شد.', '',true)
         })
